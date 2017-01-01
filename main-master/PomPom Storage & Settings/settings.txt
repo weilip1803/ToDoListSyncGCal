@@ -1,0 +1,6 @@
+{
+  "storagePath": "PomPom Storage \u0026 Settings/Storage.txt",
+  "backgroundColour": "eff3f6",
+  "displayMsgColour": "616060",
+  "inputTxtColour": "000000"
+}

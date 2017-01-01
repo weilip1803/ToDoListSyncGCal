@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- @@author A0126375A -->
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="317.0" prefWidth="406.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SettingsController">
+   <children>
+      <Label layoutX="24.0" layoutY="195.0" text="Task Storage Location:" />
+      <TextField fx:id="storageLocationString" layoutX="171.0" layoutY="190.0" />
+      <Button fx:id="selectFile" layoutX="344.0" layoutY="190.0" mnemonicParsing="false" onAction="#showSingleFileChooser" text="Open.." />
+      <Button fx:id="saveFile" layoutX="349.0" layoutY="227.0" mnemonicParsing="false" onAction="#clickSave" text="Save" />
+      <Label fx:id="label" layoutX="24.0" layoutY="31.0" text="Settings">
+         <font>
+            <Font name="Tw Cen MT Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="23.0" layoutY="69.0" text="Background Colour:" />
+      <ColorPicker fx:id="backgroundColour" layoutX="170.0" layoutY="65.0" />
+      <Label layoutX="24.0" layoutY="106.0" text="Display Message Colour:" />
+      <ColorPicker fx:id="displayMsgColor" layoutX="170.0" layoutY="102.0" />
+      <Label layoutX="24.0" layoutY="144.0" text="Command Text Colour:" />
+      <ColorPicker fx:id="commandTextColor" layoutX="171.0" layoutY="140.0" />
+      <Label fx:id="displayMsg" layoutX="24.0" layoutY="252.0" prefHeight="28.0" prefWidth="130.0" />
+   </children>
+</Pane>

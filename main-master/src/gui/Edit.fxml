@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- @@author A0126375A -->
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="384.0" prefWidth="409.0" styleClass="content" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.EditController">
+   <children>
+      <TextField fx:id="editTitle" layoutX="100.0" layoutY="18.0" prefHeight="26.0" prefWidth="237.0" />
+      <Label layoutX="14.0" layoutY="21.0" text="Title:">
+         <font>
+            <Font name="Tw Cen MT Bold" size="18.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="editStartDate" editable="false" layoutX="101.0" layoutY="58.0" prefHeight="22.0" prefWidth="237.0" />
+      <ComboBox fx:id="editStartHour" layoutX="101.0" layoutY="98.0" prefHeight="25.0" prefWidth="59.0" />
+      <ComboBox fx:id="editStartMin" layoutX="194.0" layoutY="97.0" prefHeight="25.0" prefWidth="59.0" />
+      <DatePicker fx:id="editEndDate" layoutX="101.0" layoutY="141.0" prefHeight="22.0" prefWidth="237.0" />
+      <ComboBox fx:id="editEndHour" layoutX="101.0" layoutY="181.0" prefHeight="25.0" prefWidth="59.0" />
+      <ComboBox fx:id="editEndMin" layoutX="194.0" layoutY="181.0" prefHeight="25.0" prefWidth="59.0" />
+      <TextField fx:id="editLabel" layoutX="100.0" layoutY="216.0" prefHeight="26.0" prefWidth="237.0" />
+      <Label layoutX="13.0" layoutY="221.0" text="Label:">
+         <font>
+            <Font name="Tw Cen MT Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="59.0" text="Start Date:">
+         <font>
+            <Font name="Tw Cen MT Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="14.0" layoutY="99.0" text="Start Time:">
+         <font>
+            <Font name="Tw Cen MT Bold" size="18.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="editPriority" layoutX="100.0" layoutY="265.0" prefWidth="150.0" promptText="Select One" />
+      <Label layoutX="12.0" layoutY="315.0" text="">
+         <font>
+            <Font name="Tw Cen MT Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="13.0" layoutY="141.0" text="End Date:">
+         <font>
+            <Font name="Tw Cen MT Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="13.0" layoutY="182.0" text="End Time:">
+         <font>
+            <Font name="Tw Cen MT Bold" size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="editSave" layoutX="260.0" layoutY="346.0" mnemonicParsing="false" onAction="#handleSave" text="Save" />
+      <Button fx:id="editCancel" cancelButton="true" layoutX="327.0" layoutY="346.0" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+      <Label layoutX="13.0" layoutY="268.0" text="Priority:">
+         <font>
+            <Font name="Tw Cen MT Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="174.0" layoutY="102.0" text=":" />
+      <Label layoutX="175.0" layoutY="185.0" text=":" />
+   </children>
+</Pane>

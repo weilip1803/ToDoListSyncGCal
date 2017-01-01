@@ -1,0 +1,21 @@
+{
+  "Username": "Not Set",
+  "IdCounter": 2,
+  "TaskList": [
+    {
+      "Id": 1,
+      "Type": "Task",
+      "Title": "lola",
+      "Status": "Floating",
+      "IsRecurring": false
+    },
+    {
+      "Id": 2,
+      "Type": "Task",
+      "Title": "rfa",
+      "Status": "Pending",
+      "StartDate": "Tue Apr 19 00:00:00 SGT 2016",
+      "IsRecurring": false
+    }
+  ]
+}
