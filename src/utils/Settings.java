@@ -1,10 +1,8 @@
 package utils;
 
 /**
+ * @@author A0121628L 
  * Holder object which contains all the settings variables
- * 
- * @@author A0121628L
- *
  */
 public class Settings {
 	private String storagePath;

@@ -1,31 +1,31 @@
 package parser;
 import command.InvalidCommand;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-
-
+import java.util.logging.LoggingPermission;
 
 import command.Command;
 
 /**
- *  @@author A0121760R
+ *  @@author Josh
  *
  */
 public class ArgsParser {
 	
 	protected static Logger logger = Logger.getLogger("Parser");
 	
-	protected boolean hasNoArguments = false; 
+	protected boolean hasNoArguments=false;
 	protected String commandArgumentsString;
 	
 	public ArgsParser(String commandArguments){
 		commandArgumentsString = commandArguments;
-		if (isNullArgument()){
-			commandArgumentsString = "";
-		}
+		checkForAnyArguments();
 	}
 
-	private boolean isNullArgument() {
-		return commandArgumentsString == null;
+	private void checkForAnyArguments() {
+		if (commandArgumentsString.equals("")){	
+			hasNoArguments=true;
+		}
 	}
 	
 	public Command invalidArgs(){

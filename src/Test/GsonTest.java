@@ -20,18 +20,16 @@ import utils.UserItemList;
 import static org.junit.Assert.*;
 
 /**
- * Test the gson java files. Basic example to show my teammates how the gson
- * library works.
- * 
  * @@author A0121628L
  *
  */
 
 public class GsonTest {
+	// Basic example to show my teammates how the gson library works.
 	// UserItemList objects for test
 	GsonBuilder GSON_ITEM_BUILDER;
 	Gson gsonItem;
-	// Items to initialize at before
+
 	UserItemList taskListInput;
 	Item item1;
 	Item item2;
@@ -43,11 +41,10 @@ public class GsonTest {
 	Settings settings;
 	private final String TEST_STORAGE_STRING = "TEST";
 
-	/**
-	 * Create a Gson String builder to create a text file. we register
-	 * UserItemList to write this Object into a string. So a Gsonbuilder will
-	 * create a instance of gson to do this.
-	 */
+	// Create a gson String builder to create a text . we register
+	// UserItemList to write this
+	// Object into a string. So a Gsonbuilder will create a instance of gson
+	// to do this.
 	@Before
 	public void initObjects() {
 		// Gson objects for UserItemList
@@ -80,8 +77,8 @@ public class GsonTest {
 		taskListInput.setTaskArray(tArray);
 
 		// Add Settings data
-		settings = new Settings(TEST_STORAGE_STRING, "eff3f6", "616060",
-				"000000");
+		settings = new Settings();
+		settings.setStoragePath(TEST_STORAGE_STRING);
 	}
 
 	/********************* Helper Methods **************************************/
@@ -122,11 +119,8 @@ public class GsonTest {
 	}
 
 	/********************* Unit Tests **************************************/
-
-	/**
-	 * Test the correct reading and writing of UserItemList object into the text
-	 * file
-	 */
+	// Test the correct reading and writing of UserItemList object into the text
+	// file
 	@Test
 	public void testGsonUserItemList() {
 		final String itemJson = gsonItem.toJson(taskListInput);
@@ -145,10 +139,8 @@ public class GsonTest {
 
 	}
 
-	/**
-	 * Test the correct reading and writing of Settings object into the text
-	 * file
-	 */
+	// Test the correct reading and writing of Settings object into the text
+	// file
 	@Test
 	public void testGsonSettings() {
 		final String settingsJson = gsonSettings.toJson(settings);
@@ -156,8 +148,6 @@ public class GsonTest {
 		final Settings settingsFromString = gsonSettings.fromJson(settingsJson,
 				Settings.class);
 		assertEquals(settingsFromString.getStoragePath(), TEST_STORAGE_STRING);
-		assertEquals(settingsFromString.getBackgroundColour(), "eff3f6");
-		assertEquals(settingsFromString.getReturnMsgColour(), "616060");
-		assertEquals(settingsFromString.getInputTxtColour(), "000000");
+
 	}
 }

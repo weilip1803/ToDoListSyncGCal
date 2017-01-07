@@ -1,43 +1,32 @@
 package command;
-
+/**
+ * @@author wen hao
+ *
+ */
 import java.io.IOException;
 import java.util.logging.Level;
 
 import main.POMPOM;
 
-/**
- * @@author A0121528M
- */
 public class PathCommand extends Command {
 	
-	/** Messaging **/
 	private static final String MESSAGE_SET_PATH = "Storage path set to: %s";
 	
-	/** Command Parameter **/
 	private String storageFilePath;
 	
-	/**
-	 * Constructor for PathCommand object
-	 * 
-	 * @param storageFilePath
-	 */
 	public PathCommand(String storageFilePath) {
 		this.storageFilePath = storageFilePath;
 	}
 	
-
-	/**
-	 * Carries out the action of changing storage path
-	 */
+	@Override
 	public String execute() {
 		
 		POMPOM.getStorage().setStorageFilePath(storageFilePath);
-		
-		// Saves settings and reinitializes storage
 		try {
 			POMPOM.getStorage().saveSettings();
 			POMPOM.getStorage().init();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

@@ -13,7 +13,7 @@ import storage.Storage;
 import utils.Item;
 
 /**
- * @@author A0121528M
+ * @@author wen hao
  *
  */
 public class POMPOM {
@@ -128,7 +128,7 @@ public class POMPOM {
 	}
 
 	private static boolean isNotCompleted(Item item) {
-		
+
 		return !item.getStatus().equalsIgnoreCase(STATUS_COMPLETED);
 
 	}

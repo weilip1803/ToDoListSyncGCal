@@ -32,17 +32,15 @@ import utils.SettingsAdapter;
 import utils.UserItemList;
 
 /**
- * This Class contains all the methods for users to read and write their
- * storage.txt file and their settings.txt file.
- * 
- * @@author A0121628L
- * 
+ * @@author A0121628L 
+ * This Class contains all the methods for users to read and
+ *          write their storage.txt file and their settings.txt file.
  */
 public class Storage {
 
-	private final static String DEFAULT_FILE_DIRECTORY = "PomPom Storage & Settings";
-	private final static String DEFAULT_FILE_NAME = "Storage.txt";
-	public final static String DEFAULT_STORAGE_FILE_PATH = DEFAULT_FILE_DIRECTORY
+	private final String DEFAULT_FILE_DIRECTORY = "PomPom Storage & Settings";
+	private final String DEFAULT_FILE_NAME = "Storage.txt";
+	private final String DEFAULT_STORAGE_FILE_PATH = DEFAULT_FILE_DIRECTORY
 			+ "/" + DEFAULT_FILE_NAME;
 
 	/** storageFile is not final as user can reset storage file path */
@@ -57,13 +55,6 @@ public class Storage {
 	private final File settingsFile = new File(SETTINGS_FILE_PATH);
 	private Settings settings;
 
-	private final String ERROR_DIALOG_TITLE = "Error Dialog";
-	private final String ERROR_DIALOG_HEADER = "Storage settings or file error";
-	private final String FILE_READ_ERROR_MESSAGE = "ERROR READING %s FILE! SETTINGS FILE WAS MODIFIED ILLEGAL!"
-			+ "PLEASE REMOVE ILLEGAL FILE OR MODIFY FILE. REMOVE/EDIT SETTINGS FILE TO RESET";
-	private final String CREATE_FILE_DIRECTORY_ERROR_MESSAGE = "ERROR IN CREATING DIRERCTORY. "
-			+ "FILE DIRECTORY ALREADY EXSITS. REMOVE/EDIT SETTINGS FILE TO RESET";
-	private final String LIGHT_STORAGE_ERROR = "File is a directory. Storage path set to default";
 	/** The main data that is being extracted to this objects */
 	private UserItemList userItemList;
 	private ArrayList<Item> taskList;
@@ -85,8 +76,8 @@ public class Storage {
 	}
 
 	/**
-	 * This method initializes the main objects of the storage which are the
-	 * settings/storage.txt and Gson objects(JSON library).
+	 * This method intializes the main objects of the storage which are the
+	 * settings/storage.txt and gson objects.
 	 * 
 	 * @throws IOException
 	 */
@@ -100,7 +91,7 @@ public class Storage {
 		timeParser.parseSyntax("next year");
 	}
 
-	/** Getters and Setters */
+	// Getters and Setters
 	public UserItemList getUserTaskList() {
 		return userItemList;
 	}
@@ -117,12 +108,8 @@ public class Storage {
 		this.taskList = taskList;
 	}
 
-	// Id resets on 10k
 	public long getIdCounter() {
 		idCounter = idCounter + 1;
-		if (idCounter == 10000) {
-			idCounter = 1L;
-		}
 		return idCounter;
 	}
 
@@ -189,7 +176,12 @@ public class Storage {
 			e.printStackTrace();
 		}
 		String settingsString = null;
-		settingsString = FileHandler.getStringFromFile(SETTINGS_FILE_PATH);
+		try {
+			settingsString = FileHandler.getStringFromFile(SETTINGS_FILE_PATH);
+		} catch (IOException e) {
+			logger.log(Level.SEVERE, "Failure Reading Settings ");
+			e.printStackTrace();
+		}
 		settings = deserializeSettingsString(settingsString);
 	}
 
@@ -207,6 +199,7 @@ public class Storage {
 			setStorageFilePath(settings.getStoragePath());
 		}
 		// Check for storage file if do not exist create file
+
 		checkStorageFile();
 		String storageString = FileHandler.getStringFromFile(storageFilePath);
 		userItemList = deserializeStorageString(storageString);
@@ -215,7 +208,7 @@ public class Storage {
 	}
 
 	/**
-	 * Checks storagePath exists in settings or not
+	 * Checks storagePath exisits in settings or not
 	 * 
 	 * @return boolean whether storage path exist or not
 	 */
@@ -248,47 +241,14 @@ public class Storage {
 	 */
 	private boolean checkStorageFile() throws IOException {
 		if (!storageFile.exists()) {
-			// Create file if does not exist
-			boolean madeFile = true;
-			try{
-			madeFile = storageFile.createNewFile();
+			if (storageFile.getParentFile() != null) {
+				storageFile.getParentFile().mkdirs();
 			}
-			// If directory cannot be created due to a same named file in
-						// between,
-						// feed back user with an error POPUP message
-			catch(IOException e){
-				storageFilePathError(CREATE_FILE_DIRECTORY_ERROR_MESSAGE);
-			}						
-			if (!madeFile) {
-				storageFilePathError(CREATE_FILE_DIRECTORY_ERROR_MESSAGE);
-				return false;
-			}
-//
-//			storageFile.createNewFile();
-			return false;
-		}
-		// If the file is a directory set to default storage path and return a error dialog
-		if(storageFile.isDirectory()){
-			storageFilePathError(LIGHT_STORAGE_ERROR);
-			storageFilePath = DEFAULT_STORAGE_FILE_PATH;
-			storageFile = new File(DEFAULT_STORAGE_FILE_PATH);
+
+			storageFile.createNewFile();
 			return false;
 		}
 		return true;
-	}
-	
-
-	// Cannot create file if parentFile is not directory or file with same name
-	// already exsit
-	public void storageFilePathError(String input) {
-		logger.log(Level.WARNING, CREATE_FILE_DIRECTORY_ERROR_MESSAGE);
-		storageFilePath = DEFAULT_STORAGE_FILE_PATH;
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle(ERROR_DIALOG_TITLE);
-		alert.setHeaderText(ERROR_DIALOG_HEADER);
-		alert.setContentText(CREATE_FILE_DIRECTORY_ERROR_MESSAGE);
-
-		alert.showAndWait();
 	}
 
 	/**
@@ -324,10 +284,9 @@ public class Storage {
 	 * 
 	 * @param jsonString
 	 * @return
-	 * @throws IOException
+	 * @throws IOException 
 	 */
-	private UserItemList deserializeStorageString(String jsonString)
-			throws IOException {
+	private UserItemList deserializeStorageString(String jsonString) throws IOException {
 		UserItemList userTaskList = null;
 		if (checkEmptyString(jsonString)) {
 			UserItemList utl = new UserItemList("Not Set",
@@ -337,18 +296,17 @@ public class Storage {
 			return utl;
 		}
 		try {
-			userTaskList = gsonItem.fromJson(jsonString, UserItemList.class);
-		} // Prints out error dialog when error occurs
-		catch (Exception e) {
-			System.err.println("ERROR IN STORAGE (deserializeStorageString): "
-					+ e);
+			userTaskList = gsonItem.fromJson(jsonString,
+					UserItemList.class);
+		} catch (Exception e) {
+			System.err.println("ERROR IN STORAGE (deserializeStorageString): " + e);
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle(ERROR_DIALOG_TITLE);
-			alert.setHeaderText(ERROR_DIALOG_HEADER);
-			alert.setContentText(String.format(FILE_READ_ERROR_MESSAGE,
-					"STORAGE"));
-
-			alert.showAndWait();
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText("Look, an Error Dialog");
+			alert.setContentText("ERROR READING STORAGE FILE! STORAGE FILE WAS MODIFIED WRONGlY!"
+					+ "PLEASE REMOVE ILLEGAL FILE OR MODIFY FILE");
+			
+			alert.showAndWait();			
 		}
 		return userTaskList;
 	}
@@ -364,28 +322,25 @@ public class Storage {
 			throws IOException {
 		if (checkEmptyString(jsonString)) {
 			Settings defaultSettings = new Settings(DEFAULT_STORAGE_FILE_PATH,
-					"eff3f6", "616060", "000000");
+					"eff3f6", "616060","000000");  
 			defaultSettings.setStoragePath(DEFAULT_STORAGE_FILE_PATH);
 			final String json = gsonSettings.toJson(defaultSettings);
 			FileHandler.writeStringToFile(settingsFile, json);
 			return defaultSettings;
 		}
-		// Prints out error dialog when error occurs
+		Settings settings = null;
+		
 		try {
 			settings = gsonSettings.fromJson(jsonString, Settings.class);
-		}
-		// If error in reading storage file pop up an error dialog to guide user
-		catch (Exception e) {
+		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle(ERROR_DIALOG_TITLE);
-			alert.setHeaderText(ERROR_DIALOG_HEADER);
-			alert.setContentText(String.format(FILE_READ_ERROR_MESSAGE,
-					"SETTINGS"));
+			alert.setTitle("Error Dialog");
+			alert.setHeaderText("Look, an Error Dialog");
+			alert.setContentText("ERROR READING SETTINGS FILE! SETTINGS FILE WAS MODIFIED WRONGlY!"
+					+ "PLEASE REMOVE ILLEGAL FILE OR MODIFY FILE");			
 			alert.showAndWait();
-			System.err
-					.println("ERROR IN SETTINGS (deserializeSettingsString): "
-							+ e);
-
+			System.err.println("ERROR IN SETTINGS (deserializeSettingsString): " + e);
+			
 		}
 		return gsonSettings.fromJson(jsonString, Settings.class);
 	}

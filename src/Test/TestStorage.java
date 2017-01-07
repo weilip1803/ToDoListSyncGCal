@@ -8,9 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import javax.naming.InitialContext;
 import javax.xml.stream.events.StartDocument;
 
@@ -34,6 +31,7 @@ import static org.junit.Assert.*;
 
 /**
  * @@author A0121628L
+ *
  */
 public class TestStorage {
 	/** Storage directory for testing */
@@ -82,7 +80,7 @@ public class TestStorage {
 		storageStub = new Storage();
 		storageStub.init();
 
-		/** Save the Orignal file path and change back to it later */
+		/** Save the orignal file path and change back to it later */
 		originalStorageFilePath = storageStub.getStorageFilePath();
 
 		/** Create new storage for test */
@@ -95,6 +93,7 @@ public class TestStorage {
 
 		/** Reinitialize storage with new storagefile */
 		storageStub.init();
+
 		addItems(storageStub.getTaskList());
 	}
 
@@ -106,13 +105,13 @@ public class TestStorage {
 	 * 
 	 * @param listA
 	 * @param listB
-	 * @return boolean value of comparing the 2 list
+	 * @return boolean value of comparng the 2 list
 	 */
 	public boolean isSameItemList(ArrayList<Item> listA, ArrayList<Item> listB) {
 		int lengthA = listA.size();
 		int lengthB = listB.size();
 		boolean sameList = true;
-		if (lengthA != lengthB) { 
+		if (lengthA != lengthB) {
 			return false;
 		} else {
 			/** Test every aspect of the item value are equals to each other */
@@ -144,7 +143,7 @@ public class TestStorage {
 	}
 
 	/**
-	 * This method add items for testing into the list from the parameter
+	 * This method add items for testing into the list from the param
 	 * 
 	 * @param list
 	 * @throws ParseException
@@ -203,16 +202,6 @@ public class TestStorage {
 		lst.add(doneItem2);
 		lst.add(doneItem3);
 		lst.add(doneItem4);
-	}
-
-	public void addTodayEventandTask(ArrayList<Item> lst) throws ParseException {
-		Item doneItem1 = new Item(1L, "event", "Swim", "High", "Nice day",
-				"completed", "red label", new Date(), new Date());
-
-		Item doneItem2 = new Item(2L, "task", "Sleep", "Medium", "yawn",
-				"completed", "blue label", new Date(), new Date());
-		lst.add(doneItem1);
-		lst.add(doneItem2);
 	}
 
 	/********************* UNIT TEST CASES * @throws IOException **************************************/
@@ -366,29 +355,6 @@ public class TestStorage {
 		}
 	}
 
-	// Check does it returns the correct number of task today
-	@Test
-	public void testListClassifierTodayNumOfTask() throws ParseException {
-		ArrayList<Item> temp = storageStub.getTaskList();
-		addTodayEventandTask(temp);
-		// @Before adds one today task and the other one from the above method
-		assertEquals(ListClassifier.getTodayTask(temp), "2");
-
-	}
-
-	/**
-	 * Check whether it returns the correct number of event today
-	 * 
-	 * @throws ParseException
-	 */
-	@Test
-	public void testListClassifierTodayNumOfEvent() throws ParseException {
-		ArrayList<Item> temp = storageStub.getTaskList();
-		addTodayEventandTask(temp);
-		assertEquals(ListClassifier.getTodayEvent(temp), "1");
-
-	}
-
 	/**
 	 * This method test whether the list classifier filters the item list
 	 * correctly a not.
@@ -401,20 +367,6 @@ public class TestStorage {
 		for (Item item : temp) {
 			assertTrue(item.getType().equals("event"));
 			assertTrue(item.getStatus().equals("completed"));
-		}
-	}
-
-	/**
-	 * This method test whether the list classifier filters the item list by
-	 * priority correctly a not.
-	 */
-	@Test
-	public void testClassifyPriority() {
-		ObservableList<Item> temp = ListClassifier.getSpecifiedPrirorirty(
-				FXCollections.observableArrayList(storageStub.getTaskList()),
-				"High");
-		for (Item item : temp) {
-			assertTrue(item.getPriority().equals("High"));
 		}
 	}
 

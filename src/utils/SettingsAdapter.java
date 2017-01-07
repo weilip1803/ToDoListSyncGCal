@@ -7,11 +7,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * This method helps write Settings into json string and read Json string to
- * create Settings object
- * 
- * @@author A0121628L
- * 
+ * @@author A0121628L 
+ * This method helps write Settings into json string and read
+ *          Json string to create Settings object
  */
 public class SettingsAdapter extends TypeAdapter<Settings> {
 
@@ -47,7 +45,7 @@ public class SettingsAdapter extends TypeAdapter<Settings> {
 		out.name("backgroundColour").value(settings.getBackgroundColour());
 		out.name("displayMsgColour").value(settings.getReturnMsgColour());
 		out.name("inputTxtColour").value(settings.getInputTxtColour());
-
+		
 		out.endObject();
 		out.close();
 	}

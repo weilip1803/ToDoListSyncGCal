@@ -8,19 +8,12 @@ import main.POMPOM;
 import javafx.collections.ObservableList;
 
 /**
- * These static methods help to return filtered list.
  * @@author A0121628L 
- * 
+ * These static methods help to return filtered list.
  */
 public class ListClassifier {
 
 	
-	/**
-	 * This method check with input date and determine whether the dates have the same day
-	 * @param input
-	 * @param sd
-	 * @return
-	 */
 	private static boolean checkIsToday(Date input, Date sd) {
 		if(sd == null){
 			return false;
@@ -34,11 +27,6 @@ public class ListClassifier {
 			return sameDay;
 	}
 
-	/**
-	 * This method counts the number of task which is today
-	 * @param lst
-	 * @return
-	 */
 	public static String getTodayTask(ArrayList<Item> lst){
 		Date currentDate = new Date();
 		int counter = 0;
@@ -61,11 +49,6 @@ public class ListClassifier {
 		return Integer.toString(counter);
 	}
 
-	/**
-	 * This method count the number of events today
-	 * @param lst
-	 * @return
-	 */
 	public static String getTodayEvent(ArrayList<Item> lst) {
 		Date currentDate = new Date();
 		int counter = 0;
@@ -89,11 +72,6 @@ public class ListClassifier {
 
 	}
 
-	/**
-	 * This method counts the number of overview task
-	 * @param lst
-	 * @return
-	 */
 	public static String getOverdueTask(ArrayList<Item> lst) {
 		int counter = 0;
 		for (int i = 0; i < lst.size(); i++) {
@@ -117,7 +95,6 @@ public class ListClassifier {
 	 */
 	public static ArrayList<Item> getTaskList(ArrayList<Item> lst) {
 		ArrayList<Item> result = new ArrayList<Item>();
-		
 		for (int i = 0; i < lst.size(); i++) {
 			Item currentTask = lst.get(i);
 			// Remove this line after proper init of task and event
@@ -200,16 +177,12 @@ public class ListClassifier {
 		return result;
 	}
 
-	/**
-	 * This method returns a list with the filtered priority.
-	 * @param lst
-	 * @param priority
-	 * @return
-	 */
 	public static ObservableList<Item> getSpecifiedPrirorirty(ObservableList<Item> lst,
 			String priority) {
+		System.out.println("SIZE: "+lst.size());
 		for (int i = 0; i < lst.size(); i++) {
 			Item currentTask = lst.get(i);
+			System.out.println("TASK NUMBER: " + i + "\n Priority: " + currentTask.getTitle());
 			
 			if (currentTask.getPriority() == null) {
 				i--;
@@ -226,5 +199,15 @@ public class ListClassifier {
 
 	}
 
+	// public ArrayList<Item> getPendingList() {
+	// ArrayList<Item> result = new ArrayList<Item>();
+	// for (int i = 0; i < taskArrayList.size(); i++) {
+	// Item currentTask = taskArrayList.get(i);
+	// if (currentTask.getStatus().toLowerCase().equals("pending")) {
+	// result.add(currentTask);
+	// }
+	// }
+	// return result;
+	// }
 
 }

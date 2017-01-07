@@ -2,32 +2,16 @@ package command;
 
 import main.POMPOM;
 
-/**
- * @@author A0121528M
- */
 public class ViewCommand extends Command {
 
-	/** Messaging **/
 	private static final String MESSAGE_VIEW = "%s tab has been selected for viewing.";
 	private static final String MESSAGE_ERROR = "%s is not a valid tab.";
-	
-	/** Command Parameter **/
 	private String tab;
 
-	/**
-	 * Constructor for ViewCommand object
-	 * 
-	 * @param tab
-	 */
 	public ViewCommand(String tab) {
 		this.tab = tab;
 	} 
 	
-	/**
-	 * Executes the action of swapping tabs when a ViewCommand is invoked
-	 * 
-	 * @return the appropriate feedback message 
-	 */
 	public String execute() {
 		
 		if (tab.equalsIgnoreCase(POMPOM.LABEL_COMPLETED_EVENT)) {

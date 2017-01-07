@@ -1,6 +1,6 @@
 {
   "Username": "Not Set",
-  "IdCounter": 2,
+  "IdCounter": 7,
   "TaskList": [
     {
       "Id": 1,
@@ -13,8 +13,47 @@
       "Id": 2,
       "Type": "Task",
       "Title": "rfa",
-      "Status": "Pending",
-      "StartDate": "Tue Apr 19 00:00:00 SGT 2016",
+      "Status": "Ongoing",
+      "StartDate": "Mon Apr 18 09:00:00 PDT 2016",
+      "IsRecurring": false
+    },
+    {
+      "Id": 3,
+      "Type": "Task",
+      "Title": "test",
+      "Status": "Ongoing",
+      "StartDate": "Fri Jan 06 16:12:06 PST 2017",
+      "EndDate": "Sat Jan 07 16:12:06 PST 2017",
+      "IsRecurring": false
+    },
+    {
+      "Id": 4,
+      "Type": "Task",
+      "Title": "test tommorrow to",
+      "Status": "Ongoing",
+      "StartDate": "Fri Jan 06 16:12:24 PST 2017",
+      "EndDate": "Fri Jan 13 16:12:24 PST 2017",
+      "IsRecurring": false
+    },
+    {
+      "Id": 5,
+      "Type": "Task",
+      "Title": "task asd",
+      "Status": "Floating",
+      "IsRecurring": false
+    },
+    {
+      "Id": 6,
+      "Type": "Task",
+      "Title": "asd",
+      "Status": "Floating",
+      "IsRecurring": false
+    },
+    {
+      "Id": 7,
+      "Type": "Task",
+      "Title": "event ad",
+      "Status": "Floating",
       "IsRecurring": false
     }
   ]

@@ -10,10 +10,8 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.CheckBox;
 
 /**
- * This is a holder object to contain the event or task details contains getters
- * and setters and constructor only
- * 
- * @@author A0121628L
+ * @@author A0121628L This is a holder object to contain the event or task
+ *          details contains getters and setters and constructor only
  */
 // implements Comparator<Item>
 public class Item {
@@ -31,6 +29,22 @@ public class Item {
 	private String ed;
 	private Boolean checkBox;
 
+	public String getSd() {
+		return sd;
+	}
+
+	public void setSd(String sd) {
+		this.sd = sd;
+	}
+
+	public String getEd() {
+		return ed;
+	}
+
+	public void setEd(String ed) {
+		this.ed = ed;
+	}
+
 	private boolean isRecurring;
 	private Long prevId;
 	private Long nextId;
@@ -41,21 +55,13 @@ public class Item {
 		super();
 		this.id = id;
 		this.type = type;
-		this.title = title; 
+		this.title = title;
 		this.priority = priority;
 		this.description = description;
 		this.status = status;
 		this.label = label;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm");
-		if (this.startDate != null) {
-			setSd(sdf.format(startDate));
-		}
-		if (this.endDate != null) {
-			setEd(sdf.format(endDate));
-		}
-
 	}
 
 	public Item() {
@@ -105,6 +111,7 @@ public class Item {
 	}
 
 	public void setPriority(String priority) {
+		
 		this.priority = WordUtils.capitalize(priority);
 	}
 
@@ -138,29 +145,12 @@ public class Item {
 
 	public void setStartDate(Date startDate) {
 		if (startDate == null) {
-			setSd(null);
 			this.startDate = startDate;
 			return;
 		}
-		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		setSd(sdf.format(startDate));
 		this.startDate = startDate;
-	}
-
-	public String getSd() {
-		return sd;
-	}
-
-	public void setSd(String sd) {
-		this.sd = sd;
-	}
-
-	public String getEd() {
-		return ed;
-	}
-
-	public void setEd(String ed) {
-		this.ed = ed;
 	}
 
 	public Date getEndDate() {
@@ -169,11 +159,10 @@ public class Item {
 
 	public void setEndDate(Date endDate) {
 		if (endDate == null) {
-			setEd(null);
-			this.endDate = endDate;
+			this.startDate = startDate;
 			return;
 		}
-		SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		setEd(sdf.format(endDate));
 		this.endDate = endDate;
 	}
@@ -209,7 +198,6 @@ public class Item {
 	public void setNextId(Long nextId) {
 		this.nextId = nextId;
 	}
-
 	// Debugging Method
 	// public void printInfo() {
 	// System.out.println("");
@@ -224,5 +212,26 @@ public class Item {
 	// System.out.println("EndDate: " + getEndDate());
 	// System.out.println("");
 	// }
-
+	//
+	//
+	//
+	// @Override
+	// public int compare(Item item1, Item item2) {
+	// if (item2 == null) {
+	// return 1;
+	// }
+	// if (item1 == null) {
+	// return -1;
+	// }
+	// if (item1.getEndDate().compareTo(item2.getEndDate()) > 0) {
+	// return 1;
+	// }
+	// else if (item1.getEndDate().compareTo(item2.getEndDate()) < 0) {
+	// return -1;
+	// }
+	// else if (item1.getEndDate().compareTo(item2.getEndDate()) == 0) {
+	// return 0;
+	// }
+	// return 0;
+	// }
 }

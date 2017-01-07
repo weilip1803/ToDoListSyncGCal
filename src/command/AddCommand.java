@@ -14,12 +14,12 @@ import utils.Item;
 public class AddCommand extends Command {
 
 	/** Messaging **/
-	public static final String MESSAGE_TASK_ADDED = "%s added";
-
+	private static final String MESSAGE_TASK_ADDED = "%s added";
+	
 	/** Command parameters **/
 	private Item task;
 	private boolean isUndo;
-	
+
 	/**
 	 * Constructor for a normal add command
 	 * 
@@ -84,7 +84,7 @@ public class AddCommand extends Command {
 		task.setLabel(label);
 		task.setStartDate(startDate);
 		task.setEndDate(endDate);
-		task.setRecurring(true);
+		task.setRecurring(false);
 
 		logger.log(Level.INFO, "Recurring AddCommand initialized");
 	}
@@ -110,7 +110,7 @@ public class AddCommand extends Command {
 
 		task = new Item();
 		isUndo = true;
-		assertNotNull(title);
+		assertNotNull(title); 
 
 		task.setId(id);
 		task.setType(type);
@@ -128,6 +128,7 @@ public class AddCommand extends Command {
 		logger.log(Level.INFO, "Counter action AddCommand initialized");
 	}
 
+	
 	/**
 	 * Carries out the actual action of add task into taskList
 	 */
@@ -135,9 +136,9 @@ public class AddCommand extends Command {
 		POMPOM.getStorage().getTaskList().add(task);
 	}
 
+	
 	/**
-	 * Creates the reverse action for undo. For AddCommand, the reverse would be
-	 * DelCommand.
+	 * Creates the reverse action for undo. For AddCommand, the reverse would be DelCommand.
 	 * 
 	 * @return the reverse command
 	 */
@@ -146,6 +147,7 @@ public class AddCommand extends Command {
 		return counterAction;
 	}
 
+	
 	/**
 	 * Adds the reverse command into the undo stack
 	 */
@@ -153,61 +155,65 @@ public class AddCommand extends Command {
 		Command counterAction = createCounterAction();
 		POMPOM.getUndoStack().push(counterAction);
 	}
-
+	
+	
 	/**
-	 * Sets the pointer of the recurring tasks. Like a linked list, when the
-	 * middle element is deleted, the pointers of the previous node should link
-	 * to the next node.
-	 * 
-	 * Now after deleting, when the task is added back by undo, the reverse
-	 * linking process should take place
+	 * Sets the pointer of the recurring tasks.
+	 * Like a linked list, when the middle element is deleted,
+	 * the pointers of the previous node should link to the next node.
 	 */
 	private void setProperPointers() {
-
+		
 		Item currentTask = task;
-
-		Item prevTask = getTask(currentTask.getPrevId());
-		prevTask.setNextId(currentTask.getId());
-
-		Item nextTask = getTask(currentTask.getNextId());
-		nextTask.setPrevId(currentTask.getId());
-
+		
+		if (!(currentTask.getPrevId() == null)) {
+			Item prevTask = getTask(currentTask.getPrevId());
+			prevTask.setNextId(currentTask.getId());
+		}
+		
+		if (!(currentTask.getNextId() < currentTask.getId())) {
+			Item nextTask = getTask(currentTask.getNextId());
+			nextTask.setPrevId(currentTask.getId());
+		}
+		
 	}
-
+	
+	
 	/**
 	 * Sets the proper return message to return
 	 */
 	private void setProperReturnMsg() {
-
+		
 		if (task.getType().equals(POMPOM.LABEL_EVENT)) {
 			returnMsg = String.format(MESSAGE_TASK_ADDED, POMPOM.LABEL_EVENT);
 		} else {
 			returnMsg = String.format(MESSAGE_TASK_ADDED, POMPOM.LABEL_TASK);
 		}
-
+		
 	}
 
+	
 	/**
 	 * Executes all the actions needed when a add command is invoked
 	 * 
-	 * @return the appropriate feedback message
+	 * @return the appropriate feedback message 
 	 */
 	public String execute() {
 
-		if (!isUndo && !task.isRecurring()) {
+		if (!isUndo) {
 			updateUndoStack();
 		}
-
+		
 		storeTask();
 
-		if (isUndo && task.isRecurring()) {
+		if (task.isRecurring()) {
 			setProperPointers();
 		}
 
 		setProperReturnMsg();
 		POMPOM.refreshStatus();
 		showCorrectTab(task);
-
+		
 		logger.log(Level.INFO, "AddCommand has be executed");
 		return returnMsg;
 	}

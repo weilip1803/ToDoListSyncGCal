@@ -10,10 +10,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 /**
- * This class helps write UserItemList into json string and read Json string to
- * create UserItemList object
- * 
- * @@author A0121628L
+ * @@author
+ *  A0121628L This method helps write UserItemList into json string and
+ *          read Json string to create UserItemList object
  */
 
 public class ItemAdapter extends TypeAdapter<UserItemList> {
@@ -131,10 +130,10 @@ public class ItemAdapter extends TypeAdapter<UserItemList> {
 				out.name("Type").value(task.getType());
 				out.name("Title").value(task.getTitle());
 				out.name("Priority").value(task.getPriority());
-				out.name("Description").value(task.getDescription());
+				out.name("Description").value(task.getDescription()); 
 				out.name("Label").value(task.getLabel());
 				out.name("Status").value(task.getStatus());
-
+				
 				if (task.getStartDate() != null) {
 					out.name("StartDate").value(task.getStartDate().toString());
 				}

@@ -1,611 +1,363 @@
 package parser;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-
-import command.AddCommand;
-import command.AddRecurringCommand;
-import command.Command;
-import command.InvalidCommand;
+import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
+import org.ocpsoft.prettytime.nlp.parse.DateGroup;
 import main.POMPOM;
-import utils.Item;
-import Test.TestSystem;
+
+import static org.junit.Assert.*;
+import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
-import org.ocpsoft.prettytime.nlp.PrettyTimeParser;
-
-
 /**
- * @@author A0121760R
+ * @@author Josh
  *
  */
+public class AddParserTest{
 
-public class AddParserTest {
-
-	POMPOM pompom = new POMPOM();
-	TestSystem test = new TestSystem();
-	PrettyTimeParser timeParser = pompom.timeParser;
+	Parser parser = Parser.getInstance();
+	PrettyTimeParser timeParser = new PrettyTimeParser();
 	
 	/*
-	 * For Reference:
-	 * 
-	 * Non-Recurring:
-	 * 
-	 * AddCommand(Task/Event, title, description,
-	 * 				priority, status(pending/overdue),label
-	 * 				startDate, endDate, isRecurring)
-	 * 
-	 * Recurring:
-	 * 
-	 * AddCommand(Task/Event, title, description, 
-	 * 			priority, status(pending/overdue), label, 
-	 * 			recurringStartDates.get(i), recurringEndDates.get(i), 
-	 * 			isRecurring);
-	 *
+	 * Tests if can add floating tasks
 	 */
-	
-	//Good Cases
 	@Test
-	public void testTitleOnly() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("do cs2103",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command callFromCommand = new AddCommand(POMPOM.LABEL_TASK, "do cs2103", null, null, 
-										POMPOM.STATUS_PENDING, null, null, 
-										null, false);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality = taskList.get(0);
-		Item expected = taskList.get(1);
-		assertTrue(test.testIsSameItem(expected, reality));
+	public void testAddCommandTitleOnly(){
+		AddParser add = new AddParser("do project",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		assertNull(add.getEndDate());
+		assertNull(add.getStartDate());
+		assertNull(add.getDescription());
+		assertNull(add.getStatus());
+		assertNull(add.getLabel());	
+		assertNull(add.getPriority());
+		assertTrue(add.isValidArguments);
 	}
 	
+	/*
+	 * Tests if can set priority normally
+	 */
 	@Test
-	public void testTitleAndStartDate() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("do cs2103 f:tomorrow",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Date startDate = getDate("tomorrow");
-		Command callFromCommand = new AddCommand(POMPOM.LABEL_TASK, "do cs2103", null, null, 
-										POMPOM.STATUS_PENDING, null, startDate, 
-										null, false);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality = taskList.get(0);
-		Item expected = taskList.get(1);
-		assertTrue(test.testIsSameItem(expected, reality));
+	public void testAddCommandPriority(){
+		AddParser add = new AddParser("do project p:high",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		assertEquals("high",add.getPriority());
+		assertNull(add.getEndDate());
+		assertNull(add.getStartDate());
+		assertNull(add.getDescription());
+		assertNull(add.getStatus());
+		assertNull(add.getLabel());	
+		assertTrue(add.isValidArguments);
 	}
 	
+	/*
+	 * Tests if can set priority normally (with a space in between)
+	 */
 	@Test
-	public void testTitleAndEndDate() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("do cs2103 e:20 april",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Date endDate = getDate("20 april");
-		Command callFromCommand = new AddCommand(POMPOM.LABEL_TASK, "do cs2103", null, null, 
-										POMPOM.STATUS_PENDING, null, null, 
-										endDate, false);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality = taskList.get(0);
-		Item expected = taskList.get(1);
-		assertTrue(test.testIsSameItem(expected, reality));
+	public void testAddCommandPriority2(){
+		AddParser add = new AddParser("do project p: high",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		assertEquals("high",add.getPriority());
+		assertNull(add.getEndDate());
+		assertNull(add.getStartDate());
+		assertNull(add.getDescription());
+		assertNull(add.getStatus());
+		assertNull(add.getLabel());	
+		assertTrue(add.isValidArguments);
 	}
 	
+	/*
+	 * Tests if can set priority with shortcut
+	 */
 	@Test
-	public void testTitleAndLabel() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("do cs2103 l:homework",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command callFromCommand = new AddCommand(POMPOM.LABEL_TASK, "do cs2103", null, null, 
-										POMPOM.STATUS_PENDING, "homework", null, 
-										null, false);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality = taskList.get(0);
-		Item expected = taskList.get(1);
-		assertTrue(test.testIsSameItem(expected, reality));
+	public void testAddCommandPriorityShortcut(){
+		AddParser add = new AddParser("do project p:h",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		assertEquals("high",add.getPriority());
+		assertNull(add.getEndDate());
+		assertNull(add.getStartDate());
+		assertNull(add.getDescription());
+		assertNull(add.getStatus());
+		assertNull(add.getLabel());	
+		assertTrue(add.isValidArguments);
 	}
 	
+	/*
+	 * Tests if can set label
+	 */
 	@Test
-	public void testTitleAndPriority() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("do cs2103 p:h",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command callFromCommand = new AddCommand(POMPOM.LABEL_TASK, "do cs2103", null, "high", 
-										POMPOM.STATUS_PENDING, null, null, 
-										null, false);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality = taskList.get(0);
-		Item expected = taskList.get(1);
-		assertTrue(test.testIsSameItem(expected, reality));
-	}
-	
-	@Test
-	public void testTitleAndStartAndEndDate() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("do cs2103 f:tomorrow e:20 april",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Date startDate = getDate("tomorrow");
-		Date endDate = getDate("20 april");
-		Command callFromCommand = new AddCommand(POMPOM.LABEL_TASK, "do cs2103", null, null, 
-										POMPOM.STATUS_PENDING, null, startDate, 
-										endDate, false);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality = taskList.get(0);
-		Item expected = taskList.get(1);
-		assertTrue(test.testIsSameItem(expected, reality));
-	}
-	
-	@Test
-	public void testTitleAndStartAndEndDateWiithLabel() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("do cs2103 f:tomorrow e:20 april l:homework",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Date startDate = getDate("tomorrow");
-		Date endDate = getDate("20 april");
-		Command callFromCommand = new AddCommand(POMPOM.LABEL_TASK, "do cs2103", null, null, 
-										POMPOM.STATUS_PENDING, "homework", startDate, 
-										endDate, false);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality = taskList.get(0);
-		Item expected = taskList.get(1);
-		assertTrue(test.testIsSameItem(expected, reality));
-	}
-	
-	@Test
-	public void testTitleAndStartAndEndDateWiithPriority() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("do cs2103 f:tomorrow e:20 april p:hi",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Date startDate = getDate("tomorrow");
-		Date endDate = getDate("20 april");
-		Command callFromCommand = new AddCommand(POMPOM.LABEL_TASK, "do cs2103", null, "high", 
-										POMPOM.STATUS_PENDING, null, startDate, 
-										endDate, false);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality = taskList.get(0);
-		Item expected = taskList.get(1);
-		assertTrue(test.testIsSameItem(expected, reality));
-	}
-	
-	@Test
-	public void testFullCommand() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("do cs2103 f:tomorrow e:20 april l:homework p:h",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Date startDate = getDate("tomorrow");
-		Date endDate = getDate("20 april");
-		Command callFromCommand = new AddCommand(POMPOM.LABEL_TASK, "do cs2103", null, "high", 
-										POMPOM.STATUS_PENDING, "homework", startDate, 
-										endDate, false);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality = taskList.get(0);
-		Item expected = taskList.get(1);
-		assertTrue(test.testIsSameItem(expected, reality));
-	}
-	
-	@Test
-	public void testBasicRecurring() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("do cs2103 f:12 april e:13 april r:daily until 16 april",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		ArrayList<AddCommand> recurringAddCommands = new ArrayList<AddCommand>();
-		ArrayList<Date> startDateList = new ArrayList<Date>();
-		startDateList.add(getDate("12 april"));
-		startDateList.add(getDate("13 april"));
-		startDateList.add(getDate("14 april"));
-		startDateList.add(getDate("15 april"));
-		startDateList.add(getDate("16 april"));
-		
-		ArrayList<Date> endDateList = new ArrayList<Date>();
-		endDateList.add(getDate("13 april"));
-		endDateList.add(getDate("14 april"));
-		endDateList.add(getDate("15 april"));
-		endDateList.add(getDate("16 april"));
-		endDateList.add(getDate("17 april"));
-		
-		for (int i=0; i<startDateList.size(); i++){
-			recurringAddCommands.add(new AddCommand(POMPOM.LABEL_TASK, "do cs2103", 
-										null, null, POMPOM.STATUS_PENDING, null, 
-										startDateList.get(i), endDateList.get(i), true));
-		}
-		
-		Command callFromCommand = new AddRecurringCommand(recurringAddCommands);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality;
-		Item expected;
-		for (int i=0; i<startDateList.size(); i++){
-			reality = taskList.get(i);
-			expected = taskList.get(i+startDateList.size());
-			assertTrue(test.testIsSameItem(expected, reality));
-		}
+	public void testAddCommandLabel(){
+		AddParser add = new AddParser("do project l:school work",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		assertEquals("school work",add.getLabel());
+		assertNull(add.getEndDate());
+		assertNull(add.getStartDate());
+		assertNull(add.getDescription());
+		assertNull(add.getStatus());
+		assertNull(add.getPriority());	
+		assertTrue(add.isValidArguments);
 		
 	}
 	
+	/*
+	 * Tests if can set label and priority
+	 */
 	@Test
-	public void testBasicRecurringWithExclude() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("do cs2103 f:12 april e:13 april r:daily until 16 april x:12 april to 13 april",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		ArrayList<AddCommand> recurringAddCommands = new ArrayList<AddCommand>();
-		ArrayList<Date> startDateList = new ArrayList<Date>();
-		startDateList.add(getDate("14 april"));
-		startDateList.add(getDate("15 april"));
-		startDateList.add(getDate("16 april"));
-		
-		ArrayList<Date> endDateList = new ArrayList<Date>();
-		endDateList.add(getDate("15 april"));
-		endDateList.add(getDate("16 april"));
-		endDateList.add(getDate("17 april"));
-		
-		for (int i=0; i<startDateList.size(); i++){
-			recurringAddCommands.add(new AddCommand(POMPOM.LABEL_TASK, "do cs2103", 
-										null, null, POMPOM.STATUS_PENDING, null, 
-										startDateList.get(i), endDateList.get(i), true));
-		}
-		
-		Command callFromCommand = new AddRecurringCommand(recurringAddCommands);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality;
-		Item expected;;
-		for (int i=0; i<startDateList.size(); i++){
-			reality = taskList.get(i);
-			expected = taskList.get(i+startDateList.size());
-			assertTrue(test.testIsSameItem(expected, reality));
-		}
-		
+	public void testAddCommandLabelAndPriority(){
+		AddParser add = new AddParser("do project l: school work p: high",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		assertEquals("school work",add.getLabel());
+		assertEquals("high",add.getPriority());
+		assertNull(add.getEndDate());
+		assertNull(add.getStartDate());
+		assertNull(add.getDescription());
+		assertNull(add.getStatus());	
+		assertTrue(add.isValidArguments);
 	}
 	
-	//Corner cases
+	/*
+	 * Tests if can add tasks with end date
+	 */
 	@Test
-	public void testInvalidDelimiters() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("k:try this",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command callFromCommand = new AddCommand(POMPOM.LABEL_TASK, "k:try this", null, null, 
-										POMPOM.STATUS_PENDING, null, null, 
-										null, false);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality = taskList.get(0);
-		Item expected = taskList.get(1);
-		assertTrue(test.testIsSameItem(expected, reality));
+	public void testAddCommandEndDate(){
+		AddParser add = new AddParser("do project 28 march",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		long endDateDifferenceInSeconds = getEndDateDifference(add,"28 march");
+		assertEquals(endDateDifferenceInSeconds,0);	
+		assertNull(add.getStartDate());
+		assertNull(add.getDescription());
+		assertNull(add.getLabel());
+		assertNull(add.getPriority());
+		assertNull(add.getStatus());
+		assertTrue(add.isValidArguments);
 	}
 	
+	/*
+	 * Tests if can add tasks with end date prefix
+	 */
 	@Test
-	public void testRemoveSpaces() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("asd f:today e:tomorrow l:Work p:hr:daily until 17 aprx:14 apr to 15 apr",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		ArrayList<AddCommand> recurringAddCommands = new ArrayList<AddCommand>();
-		ArrayList<Date> startDateList = new ArrayList<Date>();
-		startDateList.add(getDate("11 april"));
-		startDateList.add(getDate("12 april"));
-		startDateList.add(getDate("13 april"));
-		startDateList.add(getDate("16 april"));
-		startDateList.add(getDate("17 april"));
-		
-		
-		ArrayList<Date> endDateList = new ArrayList<Date>();
-		endDateList.add(getDate("12 april"));
-		endDateList.add(getDate("13 april"));
-		endDateList.add(getDate("14 april"));
-		endDateList.add(getDate("17 april"));
-		endDateList.add(getDate("18 april"));
-
-		
-		for (int i=0; i<startDateList.size(); i++){
-			recurringAddCommands.add(new AddCommand(POMPOM.LABEL_TASK, "asd", 
-										null, "high", POMPOM.STATUS_PENDING, "Work", 
-										startDateList.get(i), endDateList.get(i), true));
-		}
-		
-		Command callFromCommand = new AddRecurringCommand(recurringAddCommands);
-		callFromCommand.execute();
-		
-		//Get the tasks and compare
-		Item reality;
-		Item expected;
-		for (int i=0; i<startDateList.size(); i++){
-			reality = taskList.get(i);
-			expected = taskList.get(i+startDateList.size());
-			assertTrue(test.testIsSameItem(expected, reality));
-		}
-		
-	}
-	
-	//Bad Cases
-	@Test
-	public void testEmptyArguments() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser(null,false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(AddParser.MESSAGE_EMPTY_ERROR);
-		assertEquals(AddParser.MESSAGE_EMPTY_ERROR,invalidCommand.execute());
-		
-	}
-	
-	@Test
-	public void testSpaceArgument() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser(" ",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(AddParser.MESSAGE_EMPTY_ERROR);
-		assertEquals(AddParser.MESSAGE_EMPTY_ERROR,invalidCommand.execute());
-		
-	}
-	
-	@Test
-	public void testInvalidEndDateFull() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("title lol f:tomorrow e:the day after r:weekly"
-											+ "until 30 april x:13 april to 24 april",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(String.format(AddParser.MESSAGE_DATE_ERROR, "the day after"));
-		assertEquals(String.format(AddParser.MESSAGE_DATE_ERROR, "the day after"), invalidCommand.execute());
-		
-	}
-	
-	@Test
-	public void testInvalidFromDate() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("add test f:lol",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(String.format(AddParser.MESSAGE_DATE_ERROR, "lol"));
-		assertEquals(String.format(AddParser.MESSAGE_DATE_ERROR, "lol"), invalidCommand.execute());
-	}
-	
-	@Test
-	public void testInvalidEndDate() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("add test e:lol",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(String.format(AddParser.MESSAGE_DATE_ERROR, "lol"));
-		assertEquals(String.format(AddParser.MESSAGE_DATE_ERROR, "lol"), invalidCommand.execute());
-	}
-	
-	@Test
-	public void testInvalidFromAndEndDate() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("add test f:lol e:lol",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(String.format(AddParser.MESSAGE_DATE_ERROR, "lol"));
-		assertEquals(String.format(AddParser.MESSAGE_DATE_ERROR, "lol"), invalidCommand.execute());
-	}
-	
-	@Test
-	public void testInvalidEndDateValidStartDate() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("add test f:tomorrow e:lol",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(String.format(AddParser.MESSAGE_DATE_ERROR, "lol"));
-		assertEquals(String.format(AddParser.MESSAGE_DATE_ERROR, "lol"), invalidCommand.execute());
-	}
-	
-	@Test
-	public void testInvalidStartDateValidEndDate() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("add test f:lol e:tomorrow",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(String.format(AddParser.MESSAGE_DATE_ERROR, "lol"));
-		assertEquals(String.format(AddParser.MESSAGE_DATE_ERROR, "lol"), invalidCommand.execute());
-	}
-	
-	@Test
-	public void testEmptyStartDate() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("add test f: e:tomorrow",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(String.format(AddParser.MESSAGE_DATE_ERROR, ""));
-		assertEquals(String.format(AddParser.MESSAGE_DATE_ERROR, ""), invalidCommand.execute());
-	}
-	
-	@Test
-	public void testEmptyEndDate() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("add test f:tomorrow e:",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(String.format(AddParser.MESSAGE_DATE_ERROR, ""));
-		assertEquals(String.format(AddParser.MESSAGE_DATE_ERROR, ""), invalidCommand.execute());
-	}
-	
-	@Test
-	public void testAddEmptyLabelNoTitle() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("add l:",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(AddParser.MESSAGE_EMPTY_ERROR);
-		assertEquals(String.format(AddParser.MESSAGE_EMPTY_ERROR), invalidCommand.execute());
-	}
-	
-	
-	@Test
-	public void testAddEmptyPriorityNoTitle() {
-		//Initialize
-		ArrayList<Item> taskList = POMPOM.getStorage().getTaskList();
-		taskList.clear();
-		
-		//Reality Case
-		AddParser addParser = new AddParser("add p:",false);
-		addParser.parse().execute();
-	
-		//Expected Case
-		Command invalidCommand = new InvalidCommand(AddParser.MESSAGE_EMPTY_ERROR);
-		assertEquals(String.format(AddParser.MESSAGE_EMPTY_ERROR), invalidCommand.execute());
-	}
-	
-	
-	//Helper Methods
-	
-	private Date getDate(String dateString) {
-		return timeParser.parseSyntax(dateString).get(0).getDates().get(0);
+	public void testAddCommandEndDatePrefix(){
+		AddParser add = new AddParser("do project e: 28 march",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		long endDateDifferenceInSeconds = getEndDateDifference(add, "28 march");
+		assertEquals(endDateDifferenceInSeconds,0);	
+		assertNull(add.getStartDate());
+		assertNull(add.getDescription());
+		assertNull(add.getLabel());
+		assertNull(add.getPriority());
+		assertNull(add.getStatus());
+		assertTrue(add.isValidArguments);
 	}
 
-
+	
+	/*
+	 * Tests if can add tasks with start and end date.
+	 */
+	@Test
+	public void testAddCommandStartEndDate(){
+		AddParser add = new AddParser("do project e:28 march f:16 march",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		long endDateDifference= getEndDateDifference(add,"28 march");
+		long startDateDifference= getStartDateDifference(add,"16 march");
+		assertEquals(endDateDifference, 0);	
+		assertEquals(startDateDifference, 0);	
+		assertNull(add.getDescription());
+		assertNull(add.getLabel());
+		assertNull(add.getPriority());
+		assertNull(add.getStatus());
+		assertTrue(add.isValidArguments);
+	}
+	
+	/*
+	 * Tests if can add tasks with all fields filled
+	 */
+	@Test
+	public void testAddCommandFullTask(){
+		AddParser add = new AddParser("do project e:28 march f:16 march l:soc homework p:h",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		long endDateDifference= getEndDateDifference(add,"28 march");
+		long startDateDifference= getStartDateDifference(add,"16 march");
+		assertEquals("soc homework",add.getLabel());
+		assertEquals(POMPOM.PRIORITY_HIGH, add.getPriority());
+		assertEquals(endDateDifference, 0);	
+		assertEquals(startDateDifference, 0);	
+		assertNull(add.getDescription());
+		assertNull(add.getStatus());
+		assertTrue(add.isValidArguments);
+	}
+	
+	@Test
+	public void testAddCommandFullEvent(){
+		AddParser add = new AddParser("do project e:28 march f:16 march l:soc homework p:h",POMPOM.LABEL_EVENT);
+		assertEquals("do project",add.getTitle());
+		long endDateDifference= getEndDateDifference(add,"28 march");
+		long startDateDifference= getStartDateDifference(add,"16 march");
+		assertEquals("soc homework",add.getLabel());
+		assertEquals(POMPOM.PRIORITY_HIGH, add.getPriority());
+		assertEquals(endDateDifference, 0);	
+		assertEquals(startDateDifference, 0);	
+		assertNull(add.getDescription());
+		assertNull(add.getStatus());
+		assertTrue(add.isValidArguments);
+	}
+	
+	
+	/*
+	 * Tests if can switch the order of the title and end date
+	 */
+	@Test
+	public void testAddCommandReorder(){
+		AddParser add = new AddParser("28 march do project",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		long endDateDifferenceInSeconds = getEndDateDifference(add,"28 march");
+		assertEquals(endDateDifferenceInSeconds,0);		
+		assertNull(add.getStartDate());
+		assertNull(add.getDescription());
+		assertNull(add.getLabel());
+		assertNull(add.getPriority());
+		assertNull(add.getStatus());
+		assertTrue(add.isValidArguments);
+	}
+	
+	/*
+	 * Tests if can switch the order of the start date, end date and title. 
+	 */
+	@Test
+	public void testAddCommandReorderWithEndDate(){
+		AddParser add = new AddParser("e:28 march f:16 march do project",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		Date endDate= timeParser.parseSyntax("28 march").get(0).getDates().get(0);
+		Date startDate= timeParser.parseSyntax("16 march").get(0).getDates().get(0);
+		assertEquals(endDate.compareTo(add.getEndDate()),1);	
+		assertEquals(startDate.compareTo(add.getStartDate()),1);
+		assertNull(add.getDescription());
+		assertNull(add.getLabel());
+		assertNull(add.getPriority());
+		assertNull(add.getStatus());
+		assertTrue(add.isValidArguments);
+	}
+	
+	/*
+	 * Tests if can switch the order of the start date, end date and title.
+	 */
+	@Test
+	public void testAddCommandReorderWithEndDateFromFirst(){
+		AddParser add = new AddParser("f:16 march e:28 march do project",POMPOM.LABEL_TASK);
+		assertEquals("do project",add.getTitle());
+		Date endDate= timeParser.parseSyntax("28 march").get(0).getDates().get(0);
+		Date startDate= timeParser.parseSyntax("16 march").get(0).getDates().get(0);
+		assertEquals(endDate.compareTo(add.getEndDate()),1);	
+		assertEquals(startDate.compareTo(add.getStartDate()),1);
+		assertNull(add.getDescription());
+		assertNull(add.getLabel());
+		assertNull(add.getPriority());
+		assertNull(add.getStatus());	
+		assertTrue(add.isValidArguments);
+	}
+	
+	/*
+	 * Tests if can add in weekly recurring tasks with end date
+	 */
+	@Test
+	public void testAddCommandRecurringBasic(){
+		AddParser add = new AddParser("do cs2103 every friday e:6 june",POMPOM.LABEL_TASK);
+		assertEquals("do cs2103",add.getTitle());
+		long endDateDifference= getEndDateDifference(add,"6 june");
+		assertEquals(endDateDifference,0);		
+		DateGroup itemRecurringDateGroup = add.getItemRecurringDateGroup();
+		Date addStartDate = itemRecurringDateGroup.getDates().get(0);
+		long startDateDifference= getStartDateDifference(addStartDate,"this friday");
+		assertEquals(startDateDifference,0);	
+		assertNull(add.getDescription());
+		assertNull(add.getLabel());
+		assertNull(add.getPriority());
+		assertNull(add.getStatus());	
+		assertTrue(add.getIsRecurring());
+		assertTrue(add.isValidArguments);
+	}
+	
+	/*
+	 * tests if can switch the order of the fields for adding recurring tasks with
+	 * end date.
+	 */
+	@Test
+	public void testAddCommand8(){
+		AddParser add = new AddParser("do cs2103 e:6 june every friday",POMPOM.LABEL_TASK);
+		assertEquals("do cs2103",add.getTitle());
+		long endDateDifference= getEndDateDifference(add,"6 june");
+		assertEquals(endDateDifference,0);		
+		DateGroup itemRecurringDateGroup = add.getItemRecurringDateGroup();
+		Date addStartDate = itemRecurringDateGroup.getDates().get(0);
+		long startDateDifference= getStartDateDifference(addStartDate,"this friday");
+		assertEquals(startDateDifference,0);
+		assertNull(add.getDescription());
+		assertNull(add.getLabel());
+		assertNull(add.getPriority());
+		assertNull(add.getStatus());	
+		assertTrue(add.getIsRecurring());
+		assertTrue(add.isValidArguments);
+	}	
+	
+	/*
+	 * Tests if can add in a task with only a parsable title 
+	 */
+	@Test
+	public void testAddCommand9(){
+		AddParser add = new AddParser("2103",POMPOM.LABEL_TASK);
+		assertEquals("2103",add.getTitle());
+		assertNull(add.getEndDate());
+		assertNull(add.getStartDate());
+		assertNull(add.getDescription());
+		assertNull(add.getStatus());
+		assertNull(add.getLabel());	
+		assertNull(add.getPriority());
+		assertTrue(add.isValidArguments);
+	}	
+	
+	/*
+	 * Tests if can add in a task with only a parsable title 
+	 */
+	@Test
+	public void testAddCommandInvalidPriority(){
+		AddParser add = new AddParser("2103 p:lol",POMPOM.LABEL_TASK);
+		assertEquals("2103",add.getTitle());
+		assertNull(add.getEndDate());
+		assertNull(add.getStartDate());
+		assertNull(add.getDescription());
+		assertNull(add.getStatus());
+		assertNull(add.getLabel());	
+		assertNull(add.getPriority());
+		assertFalse(add.isValidArguments);
+	}	
+	
+	//helper methods
+	private long getEndDateDifference(AddParser add, String dateString) {
+		long expectedEndDateInMillis= timeParser.parseSyntax(dateString).get(0).getDates().get(0).getTime();
+		long parsedEndDateInMillis = add.getEndDate().getTime(); 
+		long endDateDifferenceInSeconds = (expectedEndDateInMillis-parsedEndDateInMillis)/1000;
+		return endDateDifferenceInSeconds;
+	}
+	
+	private long getStartDateDifference(AddParser add, String dateString) {
+		long expectedStartDateInMillis= timeParser.parseSyntax(dateString).get(0).getDates().get(0).getTime();
+		long parsedStartDateInMillis = add.getStartDate().getTime(); 
+		long startDateDifferenceInSeconds = (expectedStartDateInMillis-parsedStartDateInMillis)/1000;
+		return startDateDifferenceInSeconds;
+	}
+	
+	private long getEndDateDifference(Date add, String dateString) {
+		long expectedEndDateInMillis= timeParser.parseSyntax(dateString).get(0).getDates().get(0).getTime();
+		long parsedEndDateInMillis = add.getTime(); 
+		long endDateDifferenceInSeconds = (expectedEndDateInMillis-parsedEndDateInMillis)/1000;
+		return endDateDifferenceInSeconds;
+	}
+	
+	private long getStartDateDifference(Date add, String dateString) {
+		long expectedStartDateInMillis= timeParser.parseSyntax(dateString).get(0).getDates().get(0).getTime();
+		long parsedStartDateInMillis = add.getTime(); 
+		long startDateDifferenceInSeconds = (expectedStartDateInMillis-parsedStartDateInMillis)/1000;
+		return startDateDifferenceInSeconds;
+	}
 }
+	
+	

@@ -35,15 +35,9 @@ public class FileHandler {
 	 * @return
 	 * @throws IOException
 	 */
-	public static String getStringFromFile(String path) {
-		byte[] encoded = null;
-		try {
-			Paths.get(path);
-			encoded = Files.readAllBytes(Paths.get(path));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public static String getStringFromFile(String path)
+			throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, StandardCharsets.UTF_8);
 	}
 }

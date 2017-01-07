@@ -25,12 +25,10 @@ import javafx.stage.FileChooser;
 import main.POMPOM;
 
 /**
- * @@author A0126375A
+ * @@author Jorel
  **
  */
 public class SettingsController implements Initializable {
-
-	// Pane items in Settings Controller
 	@FXML
 	Button saveFile;
 	@FXML
@@ -47,13 +45,9 @@ public class SettingsController implements Initializable {
 	Pane mainPane;
 	@FXML
 	Label displayMsg;
-
+	
 	Settings currentSettings;
 	public static final String RETURN_MSG = "Settings Saved";
-
-	/**
-	 * This operation is to initialize Settings
-	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		assert saveFile != null : "fx:id=\"saveFile\" was not injected: check your FXML file 'Settings.fxml'.";
@@ -61,67 +55,49 @@ public class SettingsController implements Initializable {
 		assert storageLocationString != null : "fx:id=\"storageLocationString\" was not injected: check your FXML file 'Settings.fxml'.";
 		assert backgroundColour != null : "fx:id=\"backgroundColour\" was not injected: check your FXML file 'Settings.fxml'.";
 		assert displayMsgColor != null : "fx:id=\"tabColour\" was not injected: check your FXML file 'Settings.fxml'.";
-
+		
 		init();
 	}
-
-	/**
-	 * This operation is to set values in respective fields
-	 */
+	//Set the current display colours if not set to white
 	public void init() {
 		currentSettings = GUIModel.getSettings();
 		storageLocationString.setText(currentSettings.getStoragePath());
-		backgroundColour.setValue(Color.valueOf(currentSettings.getBackgroundColour()));
+		backgroundColour.setValue(Color.valueOf(currentSettings.getBackgroundColour())); 
 		displayMsgColor.setValue(Color.valueOf(currentSettings.getReturnMsgColour()));
 		commandTextColor.setValue(Color.valueOf(currentSettings.getInputTxtColour()));
 	}
-
-	/**
-	 * This operation is to get the color value from the field
-	 * 
-	 * @param colorpicker
-	 */
-	public String getColorString(ColorPicker picker) {
+	public String getColorString(ColorPicker picker){
 		String hex = picker.getValue().toString();
-		String color = hex.substring(2, hex.length() - 2);
+		String color = hex.substring(2, hex.length() -2);
 		return color;
-	}
+	} 
+	
+    public void clickSave(ActionEvent event) throws IOException {
+    	String storageFilePath = storageLocationString.getText(); 
+//    	storageLocationString.clear();
+    	
+    	saveSettings();    	
+/*    	BackgroundFill myBF = new BackgroundFill(Color.valueOf(getColorString(backgroundColour)),
+				CornerRadii.EMPTY, Insets.EMPTY);
+		mainPane.setBackground(new Background(myBF));*/
+		
+    	displayMsg.setStyle(MainController.CSS_STYLE_TEXT + getColorString(displayMsgColor));
+    	displayMsg.setText(RETURN_MSG);
+    	
+        POMPOM.saveSettings(storageFilePath);
+    }  
+	
+    
 
-	/**
-	 * This operation is to execute save actions upon save click
-	 * 
-	 * @param ActionEvent
-	 *            event
-	 */
-	public void clickSave(ActionEvent event) throws IOException {
-		String storageFilePath = storageLocationString.getText();
-
-		saveSettings();
-
-		displayMsg.setStyle(MainController.CSS_STYLE_TEXT + getColorString(displayMsgColor));
-		displayMsg.setText(RETURN_MSG);
-
-		POMPOM.saveSettings(storageFilePath);
-	}
-
-	/**
-	 * This operation is to open file chooser to choose storage path
-	 * 
-	 */
 	public void showSingleFileChooser() {
-		FileChooser fileChooser = new FileChooser();
+		FileChooser fileChooser = new FileChooser(); 
 		File selectedPath = fileChooser.showOpenDialog(null);
 		storageLocationString.setText(selectedPath.getPath());
 	}
-
-	/**
-	 * This operation is to set the colors of the respective fields
-	 * 
-	 */
-	public void saveSettings() {
-		currentSettings.setBackgroundColour(getColorString(backgroundColour));
-		currentSettings.setReturnMsgColour(getColorString(displayMsgColor));
-		currentSettings.setInputTxtColour(getColorString(commandTextColor));
+	public void saveSettings(){
+    	currentSettings.setBackgroundColour(getColorString(backgroundColour));
+    	currentSettings.setReturnMsgColour(getColorString(displayMsgColor));
+    	currentSettings.setInputTxtColour(getColorString(commandTextColor));
 	}
 
 }
