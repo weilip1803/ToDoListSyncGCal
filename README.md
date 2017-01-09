@@ -1,11 +1,11 @@
 <snippet>
   <content><![CDATA[
-# ${To Do List App}
-To do list app that allows you to add your event to google calendar at the same time
+# ${1:Project Name}
+TODO: Write a project description
 ## Installation
-It is a java application just run the JAR. Requires java 8 on your computer. https://docs.oracle.com/javase/8/docs/technotes/guides/install/mac_jdk.html
+TODO: Describe the installation process
 ## Usage
-Read user guide in the microsoft word doucment above
+TODO: Write usage instructions
 ## Contributing
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
@@ -13,11 +13,10 @@ Read user guide in the microsoft word doucment above
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 ## History
-Was a software engineering project in school and it was improved by me (:
+TODO: Write history
 ## Credits
-Credits to Google, pretty timeparser for their amazing api
+TODO: Write credits
 ## License
-None
+TODO: Write license
 ]]></content>
   <tabTrigger>readme</tabTrigger>
-</snippet>
