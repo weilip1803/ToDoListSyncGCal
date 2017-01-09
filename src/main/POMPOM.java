@@ -11,6 +11,7 @@ import command.Command;
 import parser.Parser;
 import storage.Storage;
 import utils.Item;
+import utils.QuickStart;
 
 /**
  * @@author wen hao
@@ -57,6 +58,8 @@ public class POMPOM {
 			refreshStatus();
 			timeParser = new PrettyTimeParser();
 			timeParser.parseSyntax("next year");
+			QuickStart.logIn();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

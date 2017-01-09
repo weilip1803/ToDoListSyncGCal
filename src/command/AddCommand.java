@@ -1,5 +1,8 @@
 package command;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -7,6 +10,7 @@ import java.util.logging.Logger;
 import static org.junit.Assert.assertNotNull;
 import main.POMPOM;
 import utils.Item;
+import utils.QuickStart;
 
 /**
  * @@author A0121528M
@@ -193,6 +197,20 @@ public class AddCommand extends Command {
 	}
 
 	
+	
+	private void addToGcal(Item task) throws IOException{
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+		Date startDate = task.getStartDate();
+		Date endDate = task.getEndDate();
+		if(startDate != null && endDate != null && QuickStart.checkLogIn()){
+			
+			QuickStart.addEvent(task.getTitle(), startDate, endDate);
+			
+		}
+		
+		
+		
+	}
 	/**
 	 * Executes all the actions needed when a add command is invoked
 	 * 
@@ -209,7 +227,12 @@ public class AddCommand extends Command {
 		if (task.isRecurring()) {
 			setProperPointers();
 		}
-
+		try {
+			addToGcal(task);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setProperReturnMsg();
 		POMPOM.refreshStatus();
 		showCorrectTab(task);
