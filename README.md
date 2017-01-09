@@ -1,6 +1,6 @@
 <snippet>
   <content><![CDATA[
-# ${1:To Do List App}
+# $1:To Do List App
 To do list app that allows you to add your event to google calendar at the same time
 ## Installation
 It is a java application just run the JAR. Requires java 8 on your computer. https://docs.oracle.com/javase/8/docs/technotes/guides/install/mac_jdk.html
