@@ -1,11 +1,11 @@
-<snippet>
+</snippet><snippet>
   <content><![CDATA[
-# ${1:Project Name}
-TODO: Write a project description
+# ${To Do List App}
+To do list app that allows you to add your event to google calendar at the same time
 ## Installation
-TODO: Describe the installation process
+It is a java application just run the JAR. Requires java 8 on your computer. https://docs.oracle.com/javase/8/docs/technotes/guides/install/mac_jdk.html
 ## Usage
-TODO: Write usage instructions
+Read user guide in the microsoft word doucment above
 ## Contributing
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
@@ -13,10 +13,11 @@ TODO: Write usage instructions
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 ## History
-TODO: Write history
+Was a software engineering project in school and it was improved by me (:
 ## Credits
-TODO: Write credits
+Credits to Google, pretty timeparser for their amazing api
 ## License
-TODO: Write license
+None
 ]]></content>
   <tabTrigger>readme</tabTrigger>
+</snippet>
