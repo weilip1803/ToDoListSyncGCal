@@ -1,6 +1,6 @@
 {
   "Username": "Not Set",
-  "IdCounter": 143,
+  "IdCounter": 144,
   "TaskList": [
     {
       "Id": 138,
@@ -54,6 +54,15 @@
       "Status": "Pending",
       "StartDate": "Mon Jan 09 20:58:05 PST 2017",
       "EndDate": "Fri Jan 20 20:58:05 PST 2017",
+      "IsRecurring": false
+    },
+    {
+      "Id": 144,
+      "Type": "Task",
+      "Title": "do cs3241",
+      "Status": "Pending",
+      "StartDate": "Mon Jan 09 21:04:18 PST 2017",
+      "EndDate": "Fri Jan 20 21:04:18 PST 2017",
       "IsRecurring": false
     }
   ]
