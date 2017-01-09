@@ -1,5 +1,5 @@
 <snippet>
-  <content><!:[CDATA[
+  <content>
 ## To Do List App
 To do list app that allows you to add your event to google calendar at the same time
 ## Installation
@@ -18,6 +18,6 @@ Was a software engineering project in school and it was improved by me (:
 Credits to Google, pretty timeparser for their amazing api
 ## License
 None
-]]></content>
+</content>
   <tabTrigger>readme</tabTrigger>
 </snippet>
